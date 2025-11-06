@@ -1,0 +1,46 @@
+import matplotlib.pyplot as plt 
+import numpy as np
+
+data = "Scan_010.txt"
+
+data = np.loadtxt('Scan_010.txt')
+print("Duomenų dydis: ", data.shape)
+
+integrals = np.sum(data, axis=0)
+vaizdas = integrals[:40000].reshape((200,200)) 
+
+plt.figure(figsize=(10,10))
+plt.imshow(vaizdas, cmap='hot', aspect='auto')
+plt.colorbar(label='CCD cts')
+
+plt.title('Intesyvumo zemelapis')
+plt.xlabel('X (μm)')
+plt.ylabel('Y (μm)')
+plt.show()
+
+vidurkis = np.mean(data, axis=1)
+print("vidurkis: ", vidurkis)
+
+plt.figure(figsize=(10,10))
+plt.plot(vidurkis)
+plt.title("Spektru vidurkis")
+plt.show()
+
+wavelengths = data[:, 0]
+
+nm_min = 400
+nm_max = 450
+idx = np.where((wavelengths >= nm_min) & (wavelengths <= nm_max))[0]
+
+integrals = np.sum(data[idx, :], axis=0)
+vaizdas = integrals[:40000].reshape((200,200)) 
+
+plt.figure(figsize=(10,10))
+plt.imshow(vaizdas, cmap='hot', aspect='auto')
+plt.colorbar(label=f'CCD cts ({nm_min}-{nm_max} nm)')
+
+plt.title('Intensyvumo žemėlapis')
+plt.xlabel('X (μm)')
+plt.ylabel('Y (μm)')
+plt.show()
+
